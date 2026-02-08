@@ -11,7 +11,6 @@
       font-family: 'Poppins', sans-serif;
       background: pink;
       overflow-x: hidden;
-      overflow-y: auto;
       text-align: center;
     }
 
@@ -27,7 +26,7 @@
       width: 140px;
       height: 60px;
       font-size: 22px;
-      z-index: 9999;
+      z-index: 20;
       position: absolute;
     }
 
@@ -45,6 +44,51 @@
     }
 
     @keyframes sparkleFade { 0%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(2);} }
+
+    /* INTRO PAGE STYLES */
+    #introPage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: pink;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 99999;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .intro-card {
+      background: white;
+      padding: 35px 45px;
+      border-radius: 25px;
+      box-shadow: 0 0 30px rgba(255,0,128,0.4);
+      width: 80%;
+      max-width: 320px;
+      pointer-events: auto;
+    }
+
+    #continueBtn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 20px;
+      border: none;
+      background: #ff5fa2;
+      color: white;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #continueBtn:hover, #continueBtn:active {
+      background: #ff4081;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -53,16 +97,16 @@
     <source src="bgm.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- MUSIC POPUP -->
-  <div id="musicPopup" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); display:flex; justify-content:center; align-items:center; z-index:99999; cursor:pointer; pointer-events:auto; transition:opacity 0.3s ease;">
-    <div id="popupBox" style="background:white; padding:25px 35px; border-radius:20px; font-size:20px; color:#ff007f; box-shadow:0 0 25px pink; text-align:center; pointer-events:auto;">
-      💗 Let's lighten the mood, ayang 💗<br><br>
-      <span style="font-size:17px; color:#ff62a6; font-weight:600;">Tap anywhere on the screen to continue 💞</span>
-    
+  <!-- INTRO PAGE (FIXED) -->
+  <div id="introPage">
+    <div class="intro-card">
+      <div style="font-size:24px; color:#ff007f; font-weight:600;">💗 Let's lighten the mood, ayang 💗</div>
+      <p style="font-size:17px; color:#ff62a6; margin-top:10px;">Press Continue to start the music and begin 💞</p>
+      <button id="continueBtn">Continue 💞</button>
     </div>
   </div>
 
-  <div id="mainPage">
+  <div id="mainPage" style="display:none;">
     <h1>Will You Be My Valentine, Ayang? ❤️</h1>
 
     <div id="message">My love, since the day you came into my life, everything became softer, sweeter,
@@ -82,46 +126,68 @@
     <h1 style="color:#ff007f;">Yayyyyy Ayang! ❤️</h1>
     <p style="font-size:20px; color:#b30047; width:85%; margin:auto; line-height:1.6;">
       Ayang… when you said yes, my whole heart smiled. 💖 You make everything in my life softer, calmer, and happier.
-      Every moment with you feels special, and I’m truly grateful to call you mine. 💞💗
+      Every moment with you feels special, and I'm truly grateful to call you mine. 💞💗
     </p>
   </div>
 
   <script>
     let musicStarted = false;
     const bgm = document.getElementById('bgm');
-    const popup = document.getElementById('musicPopup');
+    const introPage = document.getElementById('introPage');
+    const mainPage = document.getElementById('mainPage');
+    const continueBtn = document.getElementById('continueBtn');
 
-    // TAP ANYWHERE TO START MUSIC
-    popup.addEventListener('click', () => {
-      if (musicStarted) return;
-      bgm.play().then(() => {
-        musicStarted = true;
-        popup.style.opacity = '0';
-        setTimeout(() => popup.style.display = 'none', 300);
-      }).catch(() => {});
+    // FIXED CONTINUE BUTTON - Works everywhere!
+    continueBtn.addEventListener('click', function() {
+      console.log('Continue clicked!'); // Debug log
+      
+      // Hide intro IMMEDIATELY - no audio dependency
+      introPage.style.opacity = '0';
+      setTimeout(() => {
+        introPage.style.display = 'none';
+        mainPage.style.display = 'block';
+      }, 300);
+      
+      // Try music AFTER transition (100% reliable)
+      setTimeout(() => {
+        if (!musicStarted) {
+          bgm.play().catch((e) => {
+            console.log('Audio blocked (normal on mobile):', e);
+          });
+          musicStarted = true;
+        }
+      }, 500);
     });
 
-    // SPARKLES AFTER MUSIC STARTS
+    // Mobile touch support
+    continueBtn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      continueBtn.click();
+    });
+
     function makeSparkle(x, y) {
       const sp = document.createElement('div');
       sp.innerHTML = '✨';
-      sp.style.position = 'fixed';
-      sp.style.left = x + 'px';
-      sp.style.top = y + 'px';
-      sp.style.fontSize = '24px';
-      sp.style.pointerEvents = 'none';
-      sp.style.animation = 'sparkleFade 1s ease-out';
+      sp.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        font-size: 24px;
+        pointer-events: none;
+        animation: sparkleFade 1s ease-out;
+        z-index: 100;
+      `;
       document.body.appendChild(sp);
-      setTimeout(() => sp.remove(), 900);
+      setTimeout(() => sp.remove(), 1000);
     }
 
     document.addEventListener('click', (e) => {
-      if (!musicStarted) return;
+      if (!musicStarted || introPage.style.display !== 'none') return;
       makeSparkle(e.clientX, e.clientY);
     });
 
     function sayYes() {
-      document.getElementById('mainPage').style.display = 'none';
+      mainPage.style.display = 'none';
       document.getElementById('yesPage').style.display = 'block';
     }
 
@@ -129,8 +195,8 @@
       const noBtn = document.getElementById('no');
       const yesBtn = document.getElementById('yes');
 
-      yesBtn.style.width = yesBtn.offsetWidth + 18 + 'px';
-      yesBtn.style.height = yesBtn.offsetHeight + 10 + 'px';
+      yesBtn.style.width = (yesBtn.offsetWidth + 18) + 'px';
+      yesBtn.style.height = (yesBtn.offsetHeight + 10) + 'px';
       yesBtn.style.fontSize = (parseInt(window.getComputedStyle(yesBtn).fontSize) + 3) + 'px';
 
       const screenW = window.innerWidth;

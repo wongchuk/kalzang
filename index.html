@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Will You Be My Valentine?</title>
   <style>
-    body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: pink; overflow-x: hidden; text-align: center; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: pink;
+      overflow: hidden; /* prevent scrolling */
+      height: 100vh; /* lock height */
+      text-align: center;
+    }
     h1 { margin-top: 40px; font-size: 32px; color: #d60057; text-shadow: 2px 2px white; padding: 0 10px; }
     #message { font-size: 18px; color: #b3003c; margin: 15px auto; width: 90%; line-height: 1.5em; }
     .buttons { margin-top: 35px; position: relative; }
@@ -45,6 +53,52 @@
     /* Cute float */
     .cute { position:fixed; font-size:22px; animation:floatCute 6s infinite; pointer-events:none; }
     @keyframes floatCute { 0%{opacity:1;} 100%{ transform:translateY(-100vh); opacity:0;} }
+  
+
+    /* MOBILE FRIENDLY SCALING */
+    @media (max-width: 600px) {
+      body { padding: 0 5px; }
+
+      h1 {
+        font-size: 24px;
+        margin-top: 25px;
+      }
+
+      #message {
+        font-size: 15px;
+        width: 95%;
+        line-height: 1.4em;
+      }
+
+      img {
+        width: 80vw;
+        max-width: 220px;
+      }
+
+      #yes, #no {
+        width: 120px !important;
+        height: 55px !important;
+        font-size: 18px !important;
+        border-radius: 12px !important;
+      }
+
+      .buttons {
+        height: 70px !important;
+      }
+
+      /* Heart, glitter, cute icons smaller on phones */
+      .heart { font-size: 16px; }
+      .glitter { width: 5px; height: 5px; }
+      .cute { font-size: 18px; }
+
+      /* YES PAGE message */
+      #yesPage p {
+        font-size: 17px !important;
+        width: 92% !important;
+        line-height: 1.45em !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -93,8 +147,26 @@
 
     function moveNo() {
       const noBtn = document.getElementById('no');
-      const x = Math.random() * (window.innerWidth - 150);
-      const y = Math.random() * (window.innerHeight - 150);
+      const yesBtn = document.getElementById('yes');
+
+      // YES BUTTON GROWS
+      yesBtn.style.width = yesBtn.offsetWidth + 18 + 'px';
+      yesBtn.style.height = yesBtn.offsetHeight + 10 + 'px';
+      yesBtn.style.fontSize = (parseInt(window.getComputedStyle(yesBtn).fontSize) + 3) + 'px';
+
+      // FIXED BOUNDARIES: NO BUTTON NEVER GOES BELOW THE YES BUTTON AREA
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+
+      const maxX = screenW - noBtn.offsetWidth - 20;
+
+      // NEW SAFER BOUNDS → KEEP NO BUTTON IN TOP 45% OF SCREEN
+      const minY = 120;
+      const maxY = screenH * 0.45;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * (maxY - minY) + minY;
+
       noBtn.style.left = x + 'px';
       noBtn.style.top = y + 'px';
     }
@@ -133,3 +205,4 @@
   </script>
 </body>
 </html>
+

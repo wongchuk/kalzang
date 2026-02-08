@@ -134,7 +134,7 @@
 
   <script>
     let musicStarted = false;
-    const bgm = document.getElementById('bgm');
+    const bgm = document.getElementById('gg');
     const introPage = document.getElementById('introPage');
     const mainPage = document.getElementById('mainPage');
     const continueBtn = document.getElementById('continueBtn');
@@ -153,7 +153,7 @@
       // Try music AFTER transition (100% reliable)
       setTimeout(() => {
         if (!musicStarted) {
-          bgm.play().catch((e) => {
+          bgm.load();bgm.play().catch((e) => {
             console.log('Audio blocked (normal on mobile):', e);
           });
           musicStarted = true;

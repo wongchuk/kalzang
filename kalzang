@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Valentine?</title>
+  <style>
+    body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: pink; overflow-x: hidden; text-align: center; }
+    h1 { margin-top: 40px; font-size: 32px; color: #d60057; text-shadow: 2px 2px white; padding: 0 10px; }
+    #message { font-size: 18px; color: #b3003c; margin: 15px auto; width: 90%; line-height: 1.5em; }
+    .buttons { margin-top: 35px; position: relative; }
+    button { padding: 12px 25px; font-size: 18px; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+    #yes {
+      background: #ff005d;
+      color: white;
+      font-weight: bold;
+      width:140px;
+      height:60px;
+      font-size:22px;
+      border-radius:15px;
+    }
+    #no {
+      background: #ffadc4;
+      width:140px;
+      height:60px;
+      font-size:22px;
+      border-radius:15px;
+      position: absolute;
+      transition: left 0.35s ease, top 0.35s ease;
+    }
+
+    .heart { position: fixed; top: -10px; color: red; font-size: 20px; animation: float 5s linear infinite; }
+    @keyframes float { 0% {opacity:1;} 100% { transform: translateY(100vh); opacity:0; }}
+
+    img { margin-top: 20px; width: 70vw; max-width: 260px; border-radius: 15px; box-shadow: 0px 0px 10px #ff4d88; }
+
+    /* Glitter */
+    .glitter { position: fixed; width: 6px; height: 6px; background: radial-gradient(white, gold); border-radius: 50%; animation: glitter 1.5s linear infinite; pointer-events:none; }
+    @keyframes glitter { 0%{opacity:1;} 100%{ transform:translateY(40px) scale(0); opacity:0;} }
+
+    /* Glow border */
+    .border-glow { border:4px solid transparent; border-radius:20px; padding:10px; animation:glow 3s infinite alternate; width: fit-content; margin:auto; }
+    @keyframes glow { 0%{ box-shadow:0 0 10px #ff4d88; } 100%{ box-shadow:0 0 20px #ff99c8; } }
+
+    /* Cute float */
+    .cute { position:fixed; font-size:22px; animation:floatCute 6s infinite; pointer-events:none; }
+    @keyframes floatCute { 0%{opacity:1;} 100%{ transform:translateY(-100vh); opacity:0;} }
+  </style>
+</head>
+<body>
+
+  <audio id="bgm" autoplay loop>
+    <source src="your-music-file.mp3" type="audio/mpeg" />
+  </audio>
+
+  <div id="mainPage">
+    <div class="border-glow">💖 You're My Special Girl 💖</div>
+
+    <h1>Will You Be My Valentine, Ayang? ❤️</h1>
+
+    <div id="message">My love, since the day you came into my life, everything became softer, sweeter,
+      and so much more meaningful. You are my safe place, my happiness, my peace. ❤️<br><br>So today… I want to ask you something from the bottom of my heart.
+    </div>
+
+    <img src="your-photo-or-gif.gif" alt="Cute Image" />
+
+    <div class="buttons" style="position:relative; width:100%; height:80px; margin-top:40px;">
+      <button id="yes" onclick="sayYes()" style="position:absolute; left:35%; transform:translateX(-50%);">Yes ❤️</button>
+      <button id="no" onclick="moveNo()" style="position:absolute; right:35%; transform:translateX(50%);">No 😭</button>
+    </div>
+  </div>
+
+  <!-- YES PAGE -->
+  <div id="yesPage" style="display:none; text-align:center; padding:20px;">
+    <h1 style="color:#ff007f;">Yayyyyy Ayang! ❤️</h1>
+    <p style="font-size:20px; color:#b30047; width:85%; margin:auto; line-height:1.6;">
+      Ayang… when you said yes, my whole heart smiled. 💖<br><br>
+      I don’t know how to explain it perfectly, but you make everything in my life softer, calmer, and happier. Every time I talk to you, every little moment we share, even the silly ones, becomes something special to me. You have this gentle way of making me feel understood, appreciated, and cared for — and I hope you always feel the same from me too. 💞<br><br>
+      I’m not perfect, but loving you is the easiest thing I’ve ever done. You’re my comfort, my peace, my safe place, my constant. Being with you feels like home, and I’m truly grateful that I get to call you my person. 🧸💗<br><br>
+      Thank you for being mine, for choosing me, for staying with me. I promise I’ll love you in all the small ways, in all the big ways, in every way my heart knows. You’re my forever valentine, now and always. 💝
+    </p>
+
+    <img src="your-cute-gif.gif" />
+
+    <div style="font-size:30px; margin-top:20px;">💕✨🌸💗🧸💞</div>
+  </div>
+
+  <script>
+    function sayYes() {
+      document.getElementById('mainPage').style.display = 'none';
+      document.getElementById('yesPage').style.display = 'block';
+    }
+
+    function moveNo() {
+      const noBtn = document.getElementById('no');
+      const x = Math.random() * (window.innerWidth - 150);
+      const y = Math.random() * (window.innerHeight - 150);
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '❤';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 400);
+
+    function createGlitter() {
+      const g = document.createElement('div');
+      g.className = 'glitter';
+      g.style.left = Math.random() * window.innerWidth + 'px';
+      g.style.top = Math.random() * window.innerHeight + 'px';
+      document.body.appendChild(g);
+      setTimeout(() => g.remove(), 1500);
+    }
+    setInterval(createGlitter, 180);
+
+    function spawnCute() {
+      const cute = document.createElement('div');
+      cute.className = 'cute';
+      const icons = ['✨','💗','💕','🌸','🧸','💞'];
+      cute.innerHTML = icons[Math.floor(Math.random()*icons.length)];
+      cute.style.left = Math.random() * window.innerWidth + 'px';
+      cute.style.bottom = '-20px';
+      document.body.appendChild(cute);
+      setTimeout(() => cute.remove(), 6000);
+    }
+    setInterval(spawnCute, 900);
+  </script>
+</body>
+</html>

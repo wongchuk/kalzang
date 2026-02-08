@@ -10,8 +10,8 @@
       padding: 0;
       font-family: 'Poppins', sans-serif;
       background: pink;
-      overflow: hidden; /* prevent scrolling */
-      height: 100vh; /* lock height */
+      overflow-x: hidden; /* allow scrolling again */
+      overflow-y: auto;
       text-align: center;
     }
     h1 { margin-top: 40px; font-size: 32px; color: #d60057; text-shadow: 2px 2px white; padding: 0 10px; }
@@ -71,6 +71,47 @@
       body { padding: 0 5px; }
 
       h1 {
+        font-size: 26px;
+        margin-top: 20px;
+      }
+
+      #message {
+        font-size: 15px;
+        width: 95%;
+        line-height: 1.45em;
+      }
+
+      img {
+        width: 85vw;
+        max-width: 300px;
+        margin-top: 15px;
+      }
+
+      #yes, #no {
+        width: 130px !important;
+        height: 60px !important;
+        font-size: 18px !important;
+        border-radius: 12px !important;
+      }
+
+      .buttons {
+        margin-top: 25px !important;
+        height: 90px !important;
+      }
+
+      /* Floaters smaller on phones */
+      .heart { font-size: 18px; }
+      .glitter { width: 5px; height: 5px; }
+      .cute { font-size: 18px; }
+
+      #yesPage p {
+        font-size: 17px !important;
+        width: 92% !important;
+        line-height: 1.5em !important;
+      }
+    }
+
+      h1 {
         font-size: 24px;
         margin-top: 25px;
       }
@@ -114,7 +155,7 @@
 </head>
 <body>
 
-  <audio id="bgm" autoplay loop>
+  <audio id="bgm" loop>
     <source src="bgm.mp3" type="audio/mpeg" />
   </audio>
 
@@ -213,6 +254,16 @@
       setTimeout(() => cute.remove(), 6000);
     }
     setInterval(spawnCute, 900);
+    // ENABLE MUSIC ON FIRST TAP
+    let musicStarted = false;
+    document.addEventListener('click', () => {
+      if (!musicStarted) {
+        const bgm = document.getElementById('bgm');
+        bgm.play().catch(() => {}); // safe play
+        musicStarted = true;
+      }
+    });
+
   </script>
 </body>
 </html>

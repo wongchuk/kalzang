@@ -18,8 +18,6 @@
     h1 { margin-top: 40px; font-size: 32px; color: #d60057; text-shadow: 2px 2px white; }
     #message { font-size: 18px; color: #b3003c; margin: 15px auto; width: 90%; line-height: 1.5em; }
 
-    .buttons { margin-top: 35px; position: relative; }
-
     #yes, #no {
       padding: 12px 25px;
       border: none;
@@ -30,10 +28,11 @@
       height: 60px;
       font-size: 22px;
       z-index: 9999;
+      position: absolute;
     }
 
-    #yes { background: #ff005d; color: white; position: absolute; left: 35%; transform: translateX(-50%); }
-    #no { background: #ffadc4; position: absolute; right: 35%; transform: translateX(50%); transition: left 0.35s ease, top 0.35s ease; }
+    #yes { background: #ff005d; color: white; left: 35%; transform: translateX(-50%); }
+    #no { background: #ffadc4; right: 35%; transform: translateX(50%); }
 
     img {
       margin-top: 20px;
@@ -55,10 +54,11 @@
   </audio>
 
   <!-- MUSIC POPUP -->
-  <div id="musicPopup" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); display:flex; justify-content:center; align-items:center; z-index:99999;">
-    <div style="background:white; padding:25px 35px; border-radius:20px; font-size:20px; color:#ff007f; box-shadow:0 0 20px pink; text-align:center;">
+  <div id="musicPopup" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); display:flex; justify-content:center; align-items:center; z-index:99999; cursor:pointer; pointer-events:auto; transition:opacity 0.3s ease;">
+    <div id="popupBox" style="background:white; padding:25px 35px; border-radius:20px; font-size:20px; color:#ff007f; box-shadow:0 0 25px pink; text-align:center; pointer-events:auto;">
       💗 Let's lighten the mood, ayang 💗<br><br>
-      <button id="startMusicBtn" style="padding:10px 25px; font-size:18px; border:none; background:#ff5fa2; color:white; border-radius:12px;">Start 💞</button>
+      <span style="font-size:17px; color:#ff62a6; font-weight:600;">Tap anywhere on the screen to continue 💞</span>
+    
     </div>
   </div>
 
@@ -90,18 +90,18 @@
     let musicStarted = false;
     const bgm = document.getElementById('bgm');
     const popup = document.getElementById('musicPopup');
-    const startMusicBtn = document.getElementById('startMusicBtn');
 
-    // FIXED START BUTTON
-    startMusicBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+    // TAP ANYWHERE TO START MUSIC
+    popup.addEventListener('click', () => {
+      if (musicStarted) return;
       bgm.play().then(() => {
         musicStarted = true;
-        popup.style.display = 'none';
+        popup.style.opacity = '0';
+        setTimeout(() => popup.style.display = 'none', 300);
       }).catch(() => {});
     });
 
-    // SPARKLE ON TAP
+    // SPARKLES AFTER MUSIC STARTS
     function makeSparkle(x, y) {
       const sp = document.createElement('div');
       sp.innerHTML = '✨';

@@ -256,13 +256,20 @@
     setInterval(spawnCute, 900);
     // ENABLE MUSIC ON FIRST TAP
     let musicStarted = false;
-    document.addEventListener('click', () => {
+    document.addEventListener('touchstart', startMusic);
+    document.addEventListener('click', startMusic);
+
+    function startMusic() {
       if (!musicStarted) {
         const bgm = document.getElementById('bgm');
-        bgm.play().catch(() => {}); // safe play
-        musicStarted = true;
+        bgm.play().then(() => {
+          musicStarted = true;
+        }).catch(() => {
+          // fallback attempt
+          setTimeout(() => bgm.play().catch(() => {}), 300);
+        });
       }
-    });
+    }
 
   </script>
 </body>
